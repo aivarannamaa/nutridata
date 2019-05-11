@@ -25,18 +25,17 @@ function getDateTitle() {
     return matches[0].trim();
 }
 
-function getSelectedDate() {
+function getSelectedDateIso() {
     var title = getDateTitle();
     var matches = title.match(/\d{2}\.\d{2}\.\d{4}/);
     if (matches.length != 1) {
         throw "Can't extract date from '" + title + "'";
     }
-    return matches[0];
+    var parts = matches[0].split(".");
+    return parts[2] + "-" + parts[1] + "-" + parts[0];
 }
 
 function processMenu(menu) {
-    console.log("OOOOOOOOOO");
-    console.log(menu);
     var componentIds = [];
     menu["meals"].forEach(function (meal) {
         console.log(meal["nameEst"]);
@@ -67,7 +66,9 @@ function processMenu(menu) {
 }
 
 function startProcessing() {
-    var menuUrl = "https://tap.nutridata.ee/api-tap/analysis/date/2019-05-10"
+    var isoDate = getSelectedDateIso();
+    console.log("Date: " + isoDate);
+    var menuUrl = "https://tap.nutridata.ee/api-tap/analysis/date/" + isoDate;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.readyState == 4) {
