@@ -1,14 +1,30 @@
 var accessToken = JSON.parse(localStorage.getItem("tokenInfo"))["access_token"]
+var componentNamesAndIds = [
+    ["protein", 2],
+    ["fat", 3],
+    ["total_carbs", 4],
+    ["kcal", 39],
+];
 
 function presentSummary(menu) {
     console.log("Got both");
     console.log(menu);
 }
 
-function addrecipesToMenu(recipes, menu) {
+function addRecipesToMenu(recipes, menu) {
     var map = new Map();
-    recipes.forEach(function (comp) {
-        map.set(comp["recipeId"], comp);
+    recipes.forEach(function (receipe) {
+        map.set(receipe["recipeId"], receipe);
+        receipe.components.forEach(function (component) {
+            componentNamesAndIds.forEach(function (nid) {
+                if (component["componentId"] == nid[1]) {
+                    if (component.hasOwnProperty(nid[0])) {
+                        throw "Duplicate entry for component " + nid[1];
+                    }
+                    receipe[nid[0]] = component["amount"];
+                }
+            });
+        });
     });
 
     menu["meals"].forEach(function (meal) {
@@ -60,7 +76,7 @@ function processMenu(menu) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 var recipes = JSON.parse(this.responseText);
-                addrecipesToMenu(recipes, menu);
+                addRecipesToMenu(recipes, menu);
                 presentSummary(menu);
             } else {
                 console.error("Response " + this.status 
