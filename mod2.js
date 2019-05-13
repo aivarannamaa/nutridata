@@ -1,14 +1,22 @@
 var accessToken = JSON.parse(localStorage.getItem("tokenInfo"))["access_token"]
 
-function presentSummary(menu, components) {
+function presentSummary(menu) {
     console.log("Got both");
     console.log(menu);
-    console.log(components);
 }
 
-function error(s) {
-    console.error(s);
-    return null;
+function addrecipesToMenu(recipes, menu) {
+    var map = new Map();
+    recipes.forEach(function (comp) {
+        map.set(comp["recipeId"], comp);
+    });
+
+    menu["meals"].forEach(function (meal) {
+        meal["recipes"].forEach(function (rsp) {
+            rsp["nutridata"] = map.get(rsp["recipeId"]);
+        });
+    });
+    
 }
 
 function getDateTitle() {
@@ -36,33 +44,35 @@ function getSelectedDateIso() {
 }
 
 function processMenu(menu) {
-    var componentIds = [];
+    var recipeIds = [];
     menu["meals"].forEach(function (meal) {
         console.log(meal["nameEst"]);
         meal["recipes"].forEach(function (recipe) {
-            if (!componentIds.includes(recipe["recipeId"])) {
-                componentIds.push(recipe["recipeId"]);
+            if (!recipeIds.includes(recipe["recipeId"])) {
+                recipeIds.push(recipe["recipeId"]);
             }
         });
     });
-    console.log(componentIds);
-    var componentsUrl = "https://tap.nutridata.ee/api-foods/recipes/less/version"
+    console.log(recipeIds);
+    var recipesUrl = "https://tap.nutridata.ee/api-foods/recipes/less/version"
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                presentSummary(menu, JSON.parse(this.responseText));
+                var recipes = JSON.parse(this.responseText);
+                addrecipesToMenu(recipes, menu);
+                presentSummary(menu);
             } else {
                 console.error("Response " + this.status 
-                    + " from requesting " + componentsUrl
+                    + " from requesting " + recipesUrl
                     + "\nResponse body: " + this.responseText);
             }
         }
     };
-    xhr.open('PUT', componentsUrl, true);
+    xhr.open('PUT', recipesUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    xhr.send(JSON.stringify(componentIds));
+    xhr.send(JSON.stringify(recipeIds));
 }
 
 function startProcessing() {
