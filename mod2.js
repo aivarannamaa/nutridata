@@ -9,6 +9,16 @@ var componentNamesAndIds = [
 function presentSummary(menu) {
     console.log("Got both");
     console.log(menu);
+    
+    
+}
+
+function createSummaryTable(menu) {
+    var s = "<table>\n"
+        + "<tr></tr>\n";
+    
+    s += "</table>\n";
+    return s;
 }
 
 function addRecipesToMenu(recipes, menu) {
@@ -62,14 +72,13 @@ function getSelectedDateIso() {
 function processMenu(menu) {
     var recipeIds = [];
     menu["meals"].forEach(function (meal) {
-        console.log(meal["nameEst"]);
         meal["recipes"].forEach(function (recipe) {
             if (!recipeIds.includes(recipe["recipeId"])) {
                 recipeIds.push(recipe["recipeId"]);
             }
         });
     });
-    console.log(recipeIds);
+    
     var recipesUrl = "https://tap.nutridata.ee/api-foods/recipes/less/version"
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -93,7 +102,6 @@ function processMenu(menu) {
 
 function startProcessing() {
     var isoDate = getSelectedDateIso();
-    console.log("Date: " + isoDate);
     var menuUrl = "https://tap.nutridata.ee/api-tap/analysis/date/" + isoDate;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
