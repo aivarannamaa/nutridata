@@ -9,13 +9,47 @@ var componentNamesAndIds = [
 function presentSummary(menu) {
     console.log("Got both");
     console.log(menu);
-    
-    
+    table = createSummaryTable(menu);
+    console.log(table); 
 }
 
 function createSummaryTable(menu) {
-    var s = "<table>\n"
-        + "<tr></tr>\n";
+    var s = "<table>\n";
+    var totalKcal = 0;
+    var totalCarb = 0;
+    var totalFat = 0;
+    var totalProt = 0;
+    s += "<tr><th>Kord</th><th>Rats</th><th>KCal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
+    
+    menu.meals.forEach(function (meal) {
+        var kcal = 0;
+        var carb = 0;
+        var fat = 0;
+        var prot = 0;
+        
+        meal.recipes.forEach(function (recipe) {
+            kcal += (recipe["amount"] / 100) * recipe["nutridata"]["kcal"];
+            carb += (recipe["amount"] / 100) * recipe["nutridata"]["total_carbs"];
+            fat += (recipe["amount"] / 100) * recipe["nutridata"]["fat"];
+            prot += (recipe["amount"] / 100) * recipe["nutridata"]["protein"];
+        });
+        
+        var ratio = fat / (carb + prot);
+        
+        s += "<tr>"
+            + "<td>" + meal["nameEst"] + "</td>"
+            + "<td>" + ratio.toFixed(2) + "</td>"
+            + "<td>" + kcal.toFixed(0) + "</td>"
+            + "<td>" + carb.toFixed(2) + "</td>"
+            + "<td>" + fat.toFixed(1) + "</td>"
+            + "<td>" + prot.toFixed(1) + "</td>"
+            + "</tr>\n";
+            
+        totalKcal += kcal;
+        totalCarb += carb;
+        totalFat += fat;
+        totalProt += prot;
+    });
     
     s += "</table>\n";
     return s;
