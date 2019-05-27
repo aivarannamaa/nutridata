@@ -24,7 +24,7 @@ function presentSummary(menu) {
         console.log("crreating");
         summaryDiv = document.createElement("div");
         summaryDiv.id = "ketoSummaryDiv";
-        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 1em 2em; background: white; z-index: 1000 ! important";
+        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 0.5em; background: #f0f0f0; z-index: 1000 ! important";
         document.body.appendChild(summaryDiv);  
     } else {
         console.log("present");
@@ -34,23 +34,31 @@ function presentSummary(menu) {
 }
 
 function createSummaryTable(menu) {
-    var s = "<table id='ketoSummaryTable'>\n";
+    var s = "<table id='ketoSummaryTable' cellspacing='0'>\n";
     var totalKcal = 0;
     var totalCarb = 0;
     var totalFat = 0;
     var totalProt = 0;
     var dateStr = (menu.date[2].toString().padStart(2,'0') 
         + '.' + menu.date[1].toString().padStart(2,'0') 
-        + '.' + menu.date[0].toString());
+        //+ '.' + menu.date[0].toString()
+        );
         
     //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
-    s += "<tr><th>"+dateStr+"</th><th>Rats</th><th>KCal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
+    s += "<tr><th>"+dateStr+"</th><th>Rats</th><th>Kcal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
         var carb = 0;
         var fat = 0;
         var prot = 0;
+        
+        var name = meal["nameEst"]
+            .replace("Hommikusöök", "Hommik")
+            .replace("Lõunasöök", "Lõuna")
+            .replace("Õhtuoode", "Oode")
+            .replace("Õhtusöök", "Õhtu")
+            .replace("Ööoode", "Öö");
         
         meal.recipes.forEach(function (recipe) {
             kcal += (recipe["amount"] / 100) * recipe["nutridata"]["kcal"];
@@ -68,12 +76,12 @@ function createSummaryTable(menu) {
         var ratio = fat / (carb + prot);
         
         s += "<tr>"
-            + "<td>" + meal["nameEst"] + "</td>"
-            + "<td>" + ratio.toFixed(2) + "</td>"
-            + "<td>" + kcal.toFixed(0) + "</td>"
-            + "<td>" + carb.toFixed(2) + "</td>"
-            + "<td>" + fat.toFixed(1) + "</td>"
-            + "<td>" + prot.toFixed(1) + "</td>"
+            + "<td>" + name + "</td>"
+            + "<td class='data strong'>" + ratio.toFixed(2) + "</td>"
+            + "<td class='data strong'>" + kcal.toFixed(0) + "</td>"
+            + "<td class='data'>" + carb.toFixed(2) + "</td>"
+            + "<td class='data'>" + fat.toFixed(1) + "</td>"
+            + "<td class='data'>" + prot.toFixed(1) + "</td>"
             + "</tr>\n";
             
         totalKcal += kcal;
@@ -82,6 +90,16 @@ function createSummaryTable(menu) {
         totalProt += prot;
     });
     
+    var totalRatio = totalFat / (totalCarb + totalProt);
+    s += "<tr>"
+        + "<td class='summary'>Kokku</td>"
+        + "<td class='data summary'>" + totalRatio.toFixed(2) + "</td>"
+        + "<td class='data summary'>" + totalKcal.toFixed(0) + "</td>"
+        + "<td class='data summary'>" + totalCarb.toFixed(2) + "</td>"
+        + "<td class='data summary'>" + totalFat.toFixed(1) + "</td>"
+        + "<td class='data summary'>" + totalProt.toFixed(1) + "</td>"
+        + "</tr>\n";
+            
     s += "</table>\n";
     return s;
 }
@@ -187,4 +205,37 @@ function startProcessing() {
     xhr.send();
 }
 
+function addStyles() {
+    var style = document.createElement('style');
+    style.innerHTML = ''
+        + '#ketoSummaryTable td, #ketoSummaryTable th {' 
+        +     'font-size: small ! important;' 
+        +     'padding-top: 0px ! important;' 
+        +     'padding-bottom: 0px ! important;' 
+        +     'padding-right: 0px ! important;' 
+        + '}\n'
+        + '#ketoSummaryTable {' 
+        +     'border-spacing: 0px;' 
+        +     'border-collapse: collapse;' 
+        + '}\n'
+        + '#ketoSummaryTable td.data {' 
+        +     'text-align: right;' 
+        +     'padding-left: 6px;' 
+        + '}\n'
+        + '#ketoSummaryTable td.strong {' 
+        +     'font-weight: bold;' 
+        + '}\n'
+        + '#ketoSummaryTable td.summary {' 
+        +     'font-weight: bold;' 
+        + '}\n'
+        ;
+
+    // Get the first script tag
+    var ref = document.querySelector('script');
+
+    // Insert our new styles before the first script tag
+    ref.parentNode.insertBefore(style, ref);
+}
+
+addStyles();
 addSummaryButton();
