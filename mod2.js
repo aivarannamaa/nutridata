@@ -6,13 +6,25 @@ var componentNamesAndIds = [
     ["kcal", 39],
 ];
 
+function getSummaryButton() {
+    return document.getElementById("ketoSummaryButton");
+}
+
+function resetSummaryButton() {
+    getSummaryButton().innerHTML = "Arvuta kokkuvõte"; 
+}
+
 function addSummaryButton() {
-    var btn = document.createElement("button");
-    btn.innerHTML = "Arvuta kokkuvõte"; 
+    var btn = getSummaryButton();
+    if (btn) {
+        return;
+    }
+    btn = document.createElement("button");
     btn.id = "ketoSummaryButton";
     btn.style="position:fixed; bottom:0px; right:0px; padding: 1em 2em";
     btn.addEventListener("click", startProcessing);
     document.body.appendChild(btn);  
+    resetSummaryButton();
 }
 
 function presentSummary(menu) {
@@ -30,6 +42,7 @@ function presentSummary(menu) {
         console.log("present");
     }
     summaryDiv.innerHTML = createSummaryTable(menu);
+    resetSummaryButton();
     //console.log(table); 
 }
 
@@ -174,6 +187,8 @@ function processMenu(menu) {
                 console.error("Response " + this.status 
                     + " from requesting " + recipesUrl
                     + "\nResponse body: " + this.responseText);
+                alert("Ei saanud toitainete andmeid kätte");
+                resetSummaryButton();
             }
         }
     };
@@ -186,6 +201,7 @@ function processMenu(menu) {
 
 function startProcessing() {
     var isoDate = getSelectedDateIso();
+    getSummaryButton().innerHTML = "Palun oota ......";
     var menuUrl = "https://tap.nutridata.ee/api-tap/analysis/date/" + isoDate;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -196,6 +212,8 @@ function startProcessing() {
                 console.error("Response " + this.status 
                     + " from requesting " + menuUrl
                     + "\nResponse body: " + this.responseText);
+                alert("Ei saanud menüü andmeid kätte");
+                resetSummaryButton();
             }
         }
     };
