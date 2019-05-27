@@ -24,7 +24,7 @@ function presentSummary(menu) {
         console.log("crreating");
         summaryDiv = document.createElement("div");
         summaryDiv.id = "ketoSummaryDiv";
-        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 0.5em; background: #f0f0f0; z-index: 1000 ! important";
+        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 0.5em; background: #f0f0f0; z-index: 2147483647 ! important";
         document.body.appendChild(summaryDiv);  
     } else {
         console.log("present");
@@ -45,7 +45,7 @@ function createSummaryTable(menu) {
         );
         
     //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
-    s += "<tr><th>"+dateStr+"</th><th>Rats</th><th>Kcal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
+    s += "<tr><th>"+dateStr+"</th><th class='data'>Rats</th><th class='data'>Kcal</th><th class='data'>Süsi</th><th class='data'>Rasv</th><th class='data'>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
@@ -217,15 +217,17 @@ function addStyles() {
         + '#ketoSummaryTable {' 
         +     'border-spacing: 0px;' 
         +     'border-collapse: collapse;' 
+        +     'margin-bottom: 1em;' 
         + '}\n'
-        + '#ketoSummaryTable td.data {' 
+        + '#ketoSummaryTable td.data, #ketoSummaryTable th.data {' 
         +     'text-align: right;' 
-        +     'padding-left: 6px;' 
+        +     'padding-left: 1em;' 
         + '}\n'
         + '#ketoSummaryTable td.strong {' 
         +     'font-weight: bold;' 
         + '}\n'
         + '#ketoSummaryTable td.summary {' 
+        +     'font-style: italic;' 
         +     'font-weight: bold;' 
         + '}\n'
         ;
