@@ -1,10 +1,18 @@
-var accessToken = JSON.parse(localStorage.getItem("tokenInfo"))["access_token"]
+
 var componentNamesAndIds = [
     ["protein", 2],
     ["fat", 3],
     ["total_carbs", 4],
     ["kcal", 39],
 ];
+
+function addSummaryButton() {
+    var btn = document.createElement("BUTTON");
+    btn.innerHTML = "Arvuta kokkuvõte"; 
+    btn.style="position:fixed; bottom:0px; right:0px";
+    btn.addEventListener("click", startProcessing);
+    document.body.appendChild(btn);  
+}
 
 function presentSummary(menu) {
     console.log("Got both");
@@ -128,6 +136,7 @@ function processMenu(menu) {
             }
         }
     };
+    var accessToken = JSON.parse(localStorage.getItem("tokenInfo"))["access_token"];
     xhr.open('PUT', recipesUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
@@ -149,9 +158,10 @@ function startProcessing() {
             }
         }
     };
+    var accessToken = JSON.parse(localStorage.getItem("tokenInfo"))["access_token"];
     xhr.open('GET', menuUrl, true);
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
     xhr.send();
 }
 
-startProcessing()
+addSummaryButton();
