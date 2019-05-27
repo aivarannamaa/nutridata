@@ -7,27 +7,44 @@ var componentNamesAndIds = [
 ];
 
 function addSummaryButton() {
-    var btn = document.createElement("BUTTON");
+    var btn = document.createElement("button");
     btn.innerHTML = "Arvuta kokkuvõte"; 
-    btn.style="position:fixed; bottom:0px; right:0px";
+    btn.id = "ketoSummaryButton";
+    btn.style="position:fixed; bottom:0px; right:0px; padding: 1em 2em";
     btn.addEventListener("click", startProcessing);
     document.body.appendChild(btn);  
 }
 
 function presentSummary(menu) {
-    console.log("Got both");
-    console.log(menu);
+    //console.log("Got both");
+    //console.log(menu);
     table = createSummaryTable(menu);
-    console.log(table); 
+    var summaryDiv = document.getElementById("ketoSummaryDiv");
+    if (!summaryDiv) {
+        console.log("crreating");
+        summaryDiv = document.createElement("div");
+        summaryDiv.id = "ketoSummaryDiv";
+        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 1em 2em; background: white; z-index: 1000 ! important";
+        document.body.appendChild(summaryDiv);  
+    } else {
+        console.log("present");
+    }
+    summaryDiv.innerHTML = createSummaryTable(menu);
+    //console.log(table); 
 }
 
 function createSummaryTable(menu) {
-    var s = "<table>\n";
+    var s = "<table id='ketoSummaryTable'>\n";
     var totalKcal = 0;
     var totalCarb = 0;
     var totalFat = 0;
     var totalProt = 0;
-    s += "<tr><th>Kord</th><th>Rats</th><th>KCal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
+    var dateStr = (menu.date[2].toString().padStart(2,'0') 
+        + '.' + menu.date[1].toString().padStart(2,'0') 
+        + '.' + menu.date[0].toString());
+        
+    //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
+    s += "<tr><th>"+dateStr+"</th><th>Rats</th><th>KCal</th><th>Süsi</th><th>Rasv</th><th>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
@@ -41,6 +58,12 @@ function createSummaryTable(menu) {
             fat += (recipe["amount"] / 100) * recipe["nutridata"]["fat"];
             prot += (recipe["amount"] / 100) * recipe["nutridata"]["protein"];
         });
+        
+        if (meal["nameEst"] == "Lõunaoode" 
+            &&  kcal == 0 && carb == 0 && fat == 0 && prot == 0) {
+            return;
+        }
+        
         
         var ratio = fat / (carb + prot);
         
