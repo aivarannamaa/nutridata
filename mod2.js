@@ -6,6 +6,13 @@ var componentNamesAndIds = [
     ["kcal", 39],
 ];
 
+function closeDiv() {
+	var div = document.getElementById("ketoSummaryDiv");
+	if (div) {
+		div.parentNode.removeChild(div);
+	}
+}
+
 function getSummaryButton() {
     return document.getElementById("ketoSummaryButton");
 }
@@ -36,12 +43,13 @@ function presentSummary(menu) {
         console.log("crreating");
         summaryDiv = document.createElement("div");
         summaryDiv.id = "ketoSummaryDiv";
-        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 0.5em; background: #f0f0f0; z-index: 2147483647 ! important";
+        summaryDiv.style = "position:fixed; bottom:0px; left:0px; padding: 0.5em; background: #f0f0f0; z-index: 1049 ! important";
         document.body.appendChild(summaryDiv);  
     } else {
         console.log("present");
     }
-    summaryDiv.innerHTML = createSummaryTable(menu);
+    summaryDiv.innerHTML = createSummaryTable(menu) 
+    	+ "<div style='float:right; font-style:italic; cursor:pointer; font-size:small' onclick='closeDiv()'>SULGE</div>";
     resetSummaryButton();
     //console.log(table); 
 }
@@ -235,7 +243,8 @@ function addStyles() {
         + '#ketoSummaryTable {' 
         +     'border-spacing: 0px;' 
         +     'border-collapse: collapse;' 
-        +     'margin-bottom: 1em;' 
+        +     'margin-bottom: 0em;' 
+        +     'font-size: small ! important;' 
         + '}\n'
         + '#ketoSummaryTable td.data, #ketoSummaryTable th.data {' 
         +     'text-align: right;' 
