@@ -88,10 +88,12 @@ function createSummaryTable(menu) {
             prot += (recipe["amount"] / 100) * recipe["nutridata"]["protein"];
         });
         
+	/*
         if (meal["nameEst"] == "Lõunaoode" 
             &&  kcal == 0 && carb == 0 && fat == 0 && prot == 0) {
             return;
         }
+	*/
         
         
         var ratio = fat / (carb + prot);
