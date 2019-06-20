@@ -76,10 +76,12 @@ function createSummaryTable(menu) {
         
         var name = meal["nameEst"]
             .replace("Hommikusöök", "Hommik")
-            .replace("Lõunasöök", "Lõuna")
-            .replace("Õhtuoode", "Oode")
-            .replace("Õhtusöök", "Õhtu")
-            .replace("Ööoode", "Öö");
+            .replace("Lõunaoode",   "L-oode")
+            .replace("Lõunasöök",   "Lõuna")
+            .replace("Õhtuoode",    "Õ-oode")
+            .replace("Õhtusöök",    "Õhtu")
+            .replace("Ööoode",      "Öooode")
+	;
         
         meal.recipes.forEach(function (recipe) {
             kcal += (recipe["amount"] / 100) * recipe["nutridata"]["kcal"];
