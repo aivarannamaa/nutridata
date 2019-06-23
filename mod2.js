@@ -80,7 +80,7 @@ function createSummaryTable(menu) {
             .replace("Lõunasöök",   "Lõuna")
             .replace("Õhtuoode",    "Õ-oode")
             .replace("Õhtusöök",    "Õhtu")
-            .replace("Ööoode",      "Öooode")
+            .replace("Ööoode",      "Ööoode")
 	;
         
         meal.recipes.forEach(function (recipe) {
@@ -97,7 +97,12 @@ function createSummaryTable(menu) {
         
         var ratio = fat / (carb + prot);
         
-        s += "<tr>"
+        var rowClass = "";
+        if (name == "Lõuna" || name == "Õhtu" || name == "Ööoode") {
+        	rowClass = "break_after"
+        }
+        
+        s += "<tr class='"+rowClass+"'>"
             + "<td>" + name + "</td>"
             + "<td class='data strong'>" + ratio.toFixed(2) + "</td>"
             + "<td class='data strong'>" + kcal.toFixed(0) + "</td>"
@@ -240,6 +245,9 @@ function addStyles() {
         +     'padding-top: 0px ! important;' 
         +     'padding-bottom: 0px ! important;' 
         +     'padding-right: 0px ! important;' 
+        + '}\n'
+        + '#ketoSummaryTable tr.break_after td, #ketoSummaryTable th {' 
+        +     'border-bottom: 1px solid gray;' 
         + '}\n'
         + '#ketoSummaryTable {' 
         +     'border-spacing: 0px;' 
