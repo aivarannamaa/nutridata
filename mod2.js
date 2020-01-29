@@ -3,6 +3,7 @@ var componentNamesAndIds = [
     ["protein", 2],
     ["fat", 3],
     ["total_carbs", 4],
+    ["fiber", 17],
     ["kcal", 39],
 ];
 
