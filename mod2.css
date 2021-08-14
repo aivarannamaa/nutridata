@@ -1,9 +1,13 @@
 /* tühja ruumi vähendamine */
 .mt-2 {margin-top:0.2rem!important}
 .tai-card {min-height:0!important}
+.card-body {
+	margin-top:0!important; 
+	padding-top:0!important;
+	padding-bottom:0!important
+}
 
 /* fondi suurendamine */
 div.tai-card a {font-size: 16px!important}
 input.form-control.input-group-tai-amount {font-size: 16px!important}
 input.form-control.input-group-tai-amount.ml-0 {font-size: 13px!important}
-
