@@ -3,7 +3,6 @@ var componentNamesAndIds = [
     ["protein", 2],
     ["fat", 3],
     ["total_carbs", 4],
-    ["fiber", 17],
     ["kcal", 39],
 ];
 
@@ -157,15 +156,15 @@ function addRecipesToMenu(recipes, menu) {
 }
 
 function getDateTitle() {
-    var className = "tai-diary-tab-header";
+    var className = "date-user-badge";
     var elts = document.getElementsByClassName(className);
     if (elts.length != 1) {
-        throw "Found several '" + className + "'-s";
+        return "???";
     }
     var text = elts[0].textContent;
     var matches = text.match(/^.+\d{4}/);
     if (matches.length != 1) {
-        throw "Can't find date str";
+        return "???";
     }
     return matches[0].trim();
 }
