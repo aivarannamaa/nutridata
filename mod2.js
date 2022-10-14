@@ -3,6 +3,7 @@ var componentNamesAndIds = [
     ["protein", 2],
     ["fat", 3],
     ["total_carbs", 4],
+    ["net_carbs", 42],
     ["kcal", 39],
 ];
 
@@ -58,6 +59,7 @@ function createSummaryTable(menu) {
     var s = "<table id='ketoSummaryTable' cellspacing='0'>\n";
     var totalKcal = 0;
     var totalCarb = 0;
+    var totalNCarb = 0;
     var totalFat = 0;
     var totalProt = 0;
     var dateStr = (menu.date[2].toString().padStart(2,'0') 
@@ -66,11 +68,12 @@ function createSummaryTable(menu) {
         );
         
     //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
-    s += "<tr><th>"+dateStr+"</th><th class='data'>Rats</th><th class='data'>Kcal</th><th class='data'>Süsi</th><th class='data'>Rasv</th><th class='data'>Valk</th></tr>\n";
+    s += "<tr><th>"+dateStr+"</th><th class='data'>Rats</th><th class='data'>nRats</th><th class='data'>Kcal</th><th class='data'>Süsi</th><th class='data'>nSüsi</th><th class='data'>Rasv</th><th class='data'>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
         var carb = 0;
+        var nCarb = 0;
         var fat = 0;
         var prot = 0;
         
@@ -86,16 +89,18 @@ function createSummaryTable(menu) {
         meal.recipes.forEach(function (recipe) {
             kcal += (recipe["amount"] / 100) * recipe["nutridata"]["kcal"];
             carb += (recipe["amount"] / 100) * recipe["nutridata"]["total_carbs"];
+            nCarb += (recipe["amount"] / 100) * recipe["nutridata"]["net_carbs"];
             fat += (recipe["amount"] / 100) * recipe["nutridata"]["fat"];
             prot += (recipe["amount"] / 100) * recipe["nutridata"]["protein"];
         });
         
-        if (kcal == 0 && carb == 0 && fat == 0 && prot == 0) {
+        if (kcal == 0 && carb == 0 && nCarb == 0 && fat == 0 && prot == 0) {
             return;
         }
         
         
         var ratio = fat / (carb + prot);
+        var nRatio = fat / (nCarb + prot);
         
         var rowClass = "";
         if (name == "Lõuna" || name == "Õhtu" || name == "Ööoode") {
@@ -105,24 +110,30 @@ function createSummaryTable(menu) {
         s += "<tr class='"+rowClass+"'>"
             + "<td>" + name + "</td>"
             + "<td class='data strong'>" + ratio.toFixed(2) + "</td>"
+            + "<td class='data strong'>" + nRatio.toFixed(2) + "</td>"
             + "<td class='data strong'>" + kcal.toFixed(0) + "</td>"
             + "<td class='data'>" + carb.toFixed(2) + "</td>"
+            + "<td class='data'>" + nCarb.toFixed(2) + "</td>"
             + "<td class='data'>" + fat.toFixed(1) + "</td>"
             + "<td class='data'>" + prot.toFixed(1) + "</td>"
             + "</tr>\n";
             
         totalKcal += kcal;
         totalCarb += carb;
+        totalNCarb += nCarb;
         totalFat += fat;
         totalProt += prot;
     });
     
     var totalRatio = totalFat / (totalCarb + totalProt);
+    var totalNRatio = totalFat / (totalNCarb + totalProt);
     s += "<tr>"
         + "<td class='summary'>Kokku</td>"
         + "<td class='data summary'>" + totalRatio.toFixed(2) + "</td>"
+        + "<td class='data summary'>" + totalNRatio.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalKcal.toFixed(0) + "</td>"
         + "<td class='data summary'>" + totalCarb.toFixed(2) + "</td>"
+        + "<td class='data summary'>" + totalNCarb.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalFat.toFixed(1) + "</td>"
         + "<td class='data summary'>" + totalProt.toFixed(1) + "</td>"
         + "</tr>\n";
