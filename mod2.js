@@ -68,7 +68,7 @@ function createSummaryTable(menu) {
         );
         
     //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
-    s += "<tr><th>"+dateStr+"</th><th class='data'>Rats</th><th class='data'>nRats</th><th class='data'>Kcal</th><th class='data'>Süsi</th><th class='data'>nSüsi</th><th class='data'>Rasv</th><th class='data'>Valk</th></tr>\n";
+    s += "<tr><th>"+dateStr+"</th><th class='data'>Rats</th><th class='data'>Kcal</th><th class='data'>Süsi</th><th class='data'>Rasv</th><th class='data'>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
@@ -109,10 +109,10 @@ function createSummaryTable(menu) {
         
         s += "<tr class='"+rowClass+"'>"
             + "<td>" + name + "</td>"
-            + "<td class='data strong'>" + ratio.toFixed(2) + "</td>"
+            //+ "<td class='data strong'>" + ratio.toFixed(2) + "</td>"
             + "<td class='data strong'>" + nRatio.toFixed(2) + "</td>"
             + "<td class='data strong'>" + kcal.toFixed(0) + "</td>"
-            + "<td class='data'>" + carb.toFixed(2) + "</td>"
+            //+ "<td class='data'>" + carb.toFixed(2) + "</td>"
             + "<td class='data'>" + nCarb.toFixed(2) + "</td>"
             + "<td class='data'>" + fat.toFixed(1) + "</td>"
             + "<td class='data'>" + prot.toFixed(1) + "</td>"
@@ -129,10 +129,10 @@ function createSummaryTable(menu) {
     var totalNRatio = totalFat / (totalNCarb + totalProt);
     s += "<tr>"
         + "<td class='summary'>Kokku</td>"
-        + "<td class='data summary'>" + totalRatio.toFixed(2) + "</td>"
+        //+ "<td class='data summary'>" + totalRatio.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalNRatio.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalKcal.toFixed(0) + "</td>"
-        + "<td class='data summary'>" + totalCarb.toFixed(2) + "</td>"
+        //+ "<td class='data summary'>" + totalCarb.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalNCarb.toFixed(2) + "</td>"
         + "<td class='data summary'>" + totalFat.toFixed(1) + "</td>"
         + "<td class='data summary'>" + totalProt.toFixed(1) + "</td>"
@@ -170,12 +170,12 @@ function getDateTitle() {
     var className = "date-user-badge";
     var elts = document.getElementsByClassName(className);
     if (elts.length != 1) {
-        return "???";
+        //throw "Found several '" + className + "'-s";
     }
     var text = elts[0].textContent;
     var matches = text.match(/^.+\d{4}/);
     if (matches.length != 1) {
-        return "???";
+        throw "Can't find date str";
     }
     return matches[0].trim();
 }
