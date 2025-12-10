@@ -72,7 +72,7 @@ function createSummaryTable(menu) {
         );
         
     //s += "<tr><th colspan='6'>"+dateStr+"</th></tr>\n";
-    s += "<tr><th class='strong'>"+dateStr+"</th><th class='data'>Rats</th><th class='data break_after strong'>Kcal</th><th class='data strong'>Süsi</th><th class='data break_after'>Suhk</th><th class='data strong'>Rasv</th><th class='data break_after'>Küll</th><th class='data strong'>Valk</th></tr>\n";
+    s += "<tr><th class='strong'>"+dateStr+"</th><th class='data'>Rats</th><th class='data break_after strong'>Kcal</th><th class='data break_after'>Süsi</th><th class='data strong'>Rasv</th><th class='data break_after'>Küll</th><th class='data strong'>Valk</th></tr>\n";
     
     menu.meals.forEach(function (meal) {
         var kcal = 0;
@@ -118,8 +118,8 @@ function createSummaryTable(menu) {
             + "<td class='data'>" + nRatio.toFixed(1) + "</td>"
             + "<td class='data strong break_after'>" + kcal.toFixed(0) + "</td>"
             //+ "<td class='data'>" + carb.toFixed(2) + "</td>"
-            + "<td class='data strong'>" + nCarb.toFixed(0) + "</td>"
-            + "<td class='data break_after'>" + sugar.toFixed(0) + "</td>"
+            + "<td class='data strong break_after'>" + nCarb.toFixed(0) + "</td>"
+            //+ "<td class='data break_after'>" + sugar.toFixed(0) + "</td>"
             + "<td class='data strong'>" + fat.toFixed(0) + "</td>"
             + "<td class='data break_after'>" + satFat.toFixed(0) + "</td>"
             + "<td class='data strong'>" + prot.toFixed(0) + "</td>"
@@ -142,8 +142,8 @@ function createSummaryTable(menu) {
         + "<td class='data summary'>" + totalNRatio.toFixed(1) + "</td>"
         + "<td class='data summary break_after strong'>" + totalKcal.toFixed(0) + "</td>"
         //+ "<td class='data summary'>" + totalCarb.toFixed(2) + "</td>"
-        + "<td class='data summary strong'>" + totalNCarb.toFixed(0) +  "</td>"
-        + "<td class='data summary break_after'>" + totalSugar.toFixed(0) +  "</td>"
+        + "<td class='data summary strong break_after'>" + totalNCarb.toFixed(0) +  "</td>"
+        //+ "<td class='data summary break_after'>" + totalSugar.toFixed(0) +  "</td>"
         + "<td class='data summary strong'>" + totalFat.toFixed(0) + "</td>"
         + "<td class='data summary break_after'>" + totalSatFat.toFixed(0) + "</td>"
         + "<td class='data summary strong'>" + totalProt.toFixed(0) + "</td>"
